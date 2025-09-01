@@ -1,0 +1,61 @@
+name: 🔧 自动解压 ZIP
+
+# 触发条件：当 uploads/ 目录下的 zip 文件被更新
+on:
+  push:
+    paths:
+      - 'uploads/*.zip'
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许提交更改
+      pull-requests: write
+
+    steps:
+      # 1. 检出仓库代码
+      - name: 🛎 检出代码
+        uses: actions/checkout@v4
+
+      # 2. 查找最新的 ZIP 文件
+      - name: 🔍 查找 ZIP 文件
+        id: find-zip
+        run: |
+          ZIP_FILE=$(find uploads -name "*.zip" | sort -r | head -n 1)
+          if [ -z "$ZIP_FILE" ]; then
+            echo "❌ 未找到 ZIP 文件"
+            exit 1
+          fi
+          echo "📄 找到 ZIP: $ZIP_FILE"
+          echo "zip_file=$ZIP_FILE" >> $GITHUB_OUTPUT
+
+      # 3. 创建解压目录
+      - name: 📂 创建解压目录
+        run: mkdir -p extracted
+
+      # 4. 解压 ZIP 文件
+      - name: 🔧 解压文件
+        run: |
+          unzip -o -q "${{ steps.find-zip.outputs.zip_file }}" -d temp-extract/
+          # 将所有内容复制到 extracted/ 目录
+          cp -rf temp-extract/* extracted/ || echo "⚠️ 解压目录为空或无内容"
+          rm -rf temp-extract/
+        continue-on-error: false
+
+      # 5. 提交解压后的文件到仓库
+      - name: 📤 提交并推送到 main 分支
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add extracted/
+          git status
+
+          if git diff-index --quiet HEAD --; then
+            echo "🟡 无更改，跳过提交"
+          else
+            git commit -m "✅ 自动解压: ${{ steps.find-zip.outputs.zip_file }}"
+            git push origin main
+            echo "🎉 解压完成并已提交到仓库！"
+          fi
