@@ -1,0 +1,105 @@
+name: Unzip and Deploy to Public (Multi-Format)
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - public/**/*
+
+jobs:
+  extract-public-archives:
+    runs-on: ubuntu-latest
+    name: Extract All Archive Types in public/
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 安装必要的解压工具
+      - name: Install archive tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            unzip \
+            tar \
+            p7zip-full \
+            p7zip-rar \
+            unrar \
+            gzip
+
+      # 3. 查找 public 目录下所有支持的压缩文件
+      - name: Find archive files
+        id: find_archives
+        run: |
+          # 支持的扩展名
+          ARCHIVE_FILES=$(find public -type f \( -name "*.zip" -o \
+                                              -name "*.tar.gz" -o -name "*.tgz" -o \
+                                              -name "*.tar.bz2" -o -name "*.tbz2" -o \
+                                              -name "*.7z" -o \
+                                              -name "*.rar" -o \
+                                              -name "*.gz" \) )
+          if [ -n "$ARCHIVE_FILES" ]; then
+            echo "archives_found=true" >> $GITHUB_OUTPUT
+            echo "$ARCHIVE_FILES" > archives.txt
+            echo "Found archives:"
+            cat archives.txt
+          else
+            echo "archives_found=false" >> $GITHUB_OUTPUT
+            echo "No archives found."
+          fi
+
+      # 4. 逐个解压不同格式的文件
+      - name: Extract all archive types
+        if: steps.find_archives.outputs.archives_found == 'true'
+        run: |
+          while IFS= read -r file; do
+            dir_name=$(dirname "$file")
+            filename=$(basename "$file")
+            echo "Processing: $file"
+
+            case "$filename" in
+              *.zip)
+                unzip -o "$file" -d "$dir_name"
+                ;;
+              *.tar.gz|*.tgz)
+                tar -xzf "$file" -C "$dir_name"
+                ;;
+              *.tar.bz2|*.tbz2)
+                tar -xjf "$file" -C "$dir_name"
+                ;;
+              *.7z)
+                7z x "$file" -o"$dir_name" -y
+                ;;
+              *.rar)
+                unrar x -o+ "$file" "$dir_name"
+                ;;
+              *.gz)
+                # 假设是单个文件压缩，解压到同目录
+                gunzip -c "$file" > "${file%.gz}"
+                ;;
+              *)
+                echo "Unsupported format: $filename"
+                ;;
+            esac
+          done < archives.txt
+
+      # 5. 删除原始压缩包（可选）
+      - name: Remove archive files after extraction
+        if: steps.find_archives.outputs.archives_found == 'true'
+        run: |
+          while IFS= read -r file; do
+            rm "$file"
+            echo "Removed archive: $file"
+          done < archives.txt
+
+      # 6. 提交解压后的文件回仓库
+      - name: Commit and push extracted files
+        if: steps.find_archives.outputs.archives_found == 'true'
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git status
+          git commit -m "feat: auto-extract and update public files from archives" || echo "No changes to commit"
+          git push origin main
