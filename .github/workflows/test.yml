@@ -1,11 +1,11 @@
-name: Unpack and Overwrite Public
+name: Unpack and Overwrite Root (Preserve .github)
 
 on:
   push:
     branches:
       - main  # 根据你的默认分支修改，如 main 或 master
     paths:
-      - 'public/**'
+      - 'public/**'  # 只要 public 下有变更就触发
 
 jobs:
   unpack-and-overwrite:
@@ -30,6 +30,7 @@ jobs:
             cat /tmp/archives.txt
           else
             echo "No archives found."
+            echo "has_archive=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Extract to Temporary Directory
@@ -57,24 +58,30 @@ jobs:
             esac
           done < /tmp/archives.txt
 
-          # 检查是否解压出内容
+          # 检查是否提取出内容
           if [ ! -d /tmp/extracted ] || [ -z "$(ls -A /tmp/extracted)" ]; then
             echo "⚠️ No files extracted. Skipping overwrite."
             exit 0
           fi
 
-      - name: Overwrite public/ Directory
+      - name: Overwrite Root Directory (Preserve .github)
         if: steps.find_archives.outputs.has_archive == 'true'
         run: |
-          # 删除 public/ 所有内容（保留 .gitignore 可选）
-          echo "Overwriting public/ with extracted content..."
-          find public -mindepth 1 ! -name '.gitignore' -exec rm -rf {} +
+          echo "Overwriting root directory, preserving ./.github ..."
 
-          # 将解压内容移动到 public/
-         shopt -s dotglob nullglob
-         mv /tmp/extracted/* public/ 2>/dev/null || echo "No files to move"
-         shopt -u dotglob
-         echo "✅ public/ has been fully overwritten."
+          # 删除根目录下所有内容，除了 .github 和临时脚本忽略项
+          find . -mindepth 1 \( \
+            -name '.github' -o \
+            -name 'public' -o \
+            -name '.git' \) \
+            -prune -o -exec rm -rf {} +
+
+          # 移动解压内容到根目录
+          shopt -s dotglob nullglob
+          mv /tmp/extracted/* ./ 2>/dev/null || echo "No files to move"
+          shopt -u dotglob
+
+          echo "✅ Root has been overwritten (except ./.github)."
 
       - name: Commit and Push Changes
         if: steps.find_archives.outputs.has_archive == 'true'
@@ -82,11 +89,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # 添加所有变更：新文件、删除的文件
-          git add -A public/
+          # 添加所有变更（新增、删除、修改）
+          git add -A
 
-          git status  # 查看变更
+          git status  # 查看当前状态
 
-          # 提交（即使无变更也不会失败）
-          git commit -m "chore: overwrite public/ from uploaded archive" || echo "No changes to commit"
+          # 提交更改
+          git commit -m "chore: overwrite root from archive in public/" || echo "No changes to commit"
           git push origin ${{ github.ref }}
