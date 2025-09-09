@@ -6,7 +6,7 @@ import sitemap from "@astrojs/sitemap";
 
 
 export default defineConfig({
-  site: "https://null",
+  site: "https://undefined",
   integrations: [
     tailwind(),
     react(),
