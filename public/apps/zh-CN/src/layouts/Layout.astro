@@ -1,0 +1,48 @@
+---
+import "../styles/style.css";
+import "../styles/variants.css";
+import { ClientRouter } from "astro:transitions";
+import CookieConsent from "../components/CookieConsent.astro";
+---
+
+<!doctype html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <meta name="generator" content={Astro.generator} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <ClientRouter />
+    <slot name="meta" />
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?undefined"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // ✅ 告诉 GA：用户尚未同意，默认禁止使用 cookie
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied'
+      });
+      gtag('config', 'undefined');
+    </script>
+  </head>
+  <body>
+    <slot />
+    <CookieConsent />
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+
+  
