@@ -1,0 +1,11 @@
+---
+import { Icon } from "@rxdrag/website-lib-core";
+
+const { class: className } = Astro.props;---
+
+<li class:list={["flex items-start text-sm", className]}>
+  <span class="mr-4 mt-0.5">
+    <Icon icon="ri:checkbox-line" className="size-5 text-primary" client:load />
+  </span>
+  <slot />
+</li>
