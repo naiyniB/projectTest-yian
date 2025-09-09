@@ -71,8 +71,10 @@ jobs:
           find public -mindepth 1 ! -name '.gitignore' -exec rm -rf {} +
 
           # 将解压内容移动到 public/
-          mv /tmp/extracted/* public/
-          echo "✅ public/ has been fully overwritten."
+         shopt -s dotglob nullglob
+         mv /tmp/extracted/* public/ 2>/dev/null || echo "No files to move"
+         shopt -u dotglob
+         echo "✅ public/ has been fully overwritten."
 
       - name: Commit and Push Changes
         if: steps.find_archives.outputs.has_archive == 'true'
