@@ -1,15 +1,18 @@
-name: Unpack to Public
+name: Unpack and Overwrite Public
 
 on:
   push:
+    branches:
+      - main  # 根据你的默认分支修改，如 main 或 master
     paths:
       - 'public/**'
 
 jobs:
-  unpack:
+  unpack-and-overwrite:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 允许提交更改
+      contents: write  # 允许提交
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -17,51 +20,71 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
 
-      - name: Identify Changed Files
-        id: changed_files
+      - name: Find Compressed Files in public/
+        id: find_archives
         run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^public/.*\.\(zip\|tar\.gz\|tgz\|gz\)$' > /tmp/compressed_files.txt || true
-          if [ -s /tmp/compressed_files.txt ]; then
-            echo "has_compressed=true" >> $GITHUB_OUTPUT
+          echo "Checking for archives in public/..."
+          find public -type f \( -name "*.zip" -o -name "*.tar.gz" -o -name "*.tgz" -o -name "*.gz" \) -print > /tmp/archives.txt
+          if [ -s /tmp/archives.txt ]; then
+            echo "has_archive=true" >> $GITHUB_OUTPUT
+            cat /tmp/archives.txt
+          else
+            echo "No archives found."
           fi
 
-      - name: Unpack Archives
-        if: steps.changed_files.outputs.has_compressed == 'true'
+      - name: Extract to Temporary Directory
+        if: steps.find_archives.outputs.has_archive == 'true'
         run: |
-          while IFS= read -r file; do
-            dir=$(dirname "$file")
-            mkdir -p /tmp/extract
-            case "$file" in
+          mkdir -p /tmp/extracted
+          while IFS= read -r archive; do
+            echo "Processing archive: $archive"
+            case "$archive" in
               *.zip)
-                unzip -q "$file" -d /tmp/extract
+                unzip -q "$archive" -d /tmp/extracted
                 ;;
               *.tar.gz|*.tgz)
-                tar -xzf "$file" -C /tmp/extract
+                tar -xzf "$archive" -C /tmp/extracted
                 ;;
               *.gz)
-                # 假设是单个 .gz 文件
-                gunzip -c "$file" > /tmp/extract/$(basename "${file%.gz}")
+                # 假设是单个文件 .gz
+                cp "$archive" /tmp/temp.gz
+                gunzip -f /tmp/temp.gz
+                mv "/tmp/temp" "/tmp/extracted/$(basename "${archive%.gz}")"
                 ;;
               *)
-                echo "Unsupported format: $file"
-                continue
+                echo "Unsupported format: $archive"
                 ;;
             esac
+          done < /tmp/archives.txt
 
-            # 覆盖 public 目录内容
-            rsync -av --ignore-existing /tmp/extract/ "$dir/"
-            echo "Unpacked $file to $dir"
+          # 检查是否解压出内容
+          if [ ! -d /tmp/extracted ] || [ -z "$(ls -A /tmp/extracted)" ]; then
+            echo "⚠️ No files extracted. Skipping overwrite."
+            exit 0
+          fi
 
-            # 清理临时目录
-            rm -rf /tmp/extract/*
-          done < /tmp/compressed_files.txt
+      - name: Overwrite public/ Directory
+        if: steps.find_archives.outputs.has_archive == 'true'
+        run: |
+          # 删除 public/ 所有内容（保留 .gitignore 可选）
+          echo "Overwriting public/ with extracted content..."
+          find public -mindepth 1 ! -name '.gitignore' -exec rm -rf {} +
+
+          # 将解压内容移动到 public/
+          mv /tmp/extracted/* public/
+          echo "✅ public/ has been fully overwritten."
 
       - name: Commit and Push Changes
-        if: steps.changed_files.outputs.has_compressed == 'true'
+        if: steps.find_archives.outputs.has_archive == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/
-          git status
-          git commit -m "feat: auto unpack archives to public" || echo "No changes to commit"
+
+          # 添加所有变更：新文件、删除的文件
+          git add -A public/
+
+          git status  # 查看变更
+
+          # 提交（即使无变更也不会失败）
+          git commit -m "chore: overwrite public/ from uploaded archive" || echo "No changes to commit"
           git push origin ${{ github.ref }}
