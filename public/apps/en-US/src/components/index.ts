@@ -1,0 +1,8 @@
+export { default as Header } from "./Header.astro";
+export { default as HomeHero } from "./HomeHero.astro";
+export { default as BreadcrumbCTA } from "./BreadcrumbCTA.astro";
+export { default as Footer } from "./Footer.astro";
+export { default as FeaturedProducts } from "./FeaturedProducts.astro";
+export { default as Langs } from "./Langs.astro";
+export { default as EnquiryTrigger } from "./EnquiryTrigger.astro";
+export { default as EnquiryModal } from "./EnquiryModal.astro";

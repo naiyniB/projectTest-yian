@@ -1,0 +1,85 @@
+---
+import { PageType } from "@rxdrag/rxcms-models";
+import Layout from "@/layouts/Layout.astro";
+import { rx } from "theme";
+import { Meta } from "@rxdrag/website-lib";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { FooterCTA, Globals } from "theme";
+
+const meta = (await rx.getPageByType(PageType.Thanks))?.meta;---
+
+<Layout>
+  <Header />
+  <Meta title="Thank You" slot="meta" content={meta} />
+  <main class="container mt-36 mx-auto px-4 py-16 text-center">
+    <div
+      class="max-w-2xl mx-auto bg-gradient-to-b from-white to-sky-50 rounded-xl overflow-hidden p-10 my-12 border border-sky-100"
+    >
+      <div class="flex flex-col items-center space-y-8">
+        <div class="bg-green-100 p-5 rounded-full animate-pulse">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-20 w-20 text-green-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"></path>
+          </svg>
+        </div>
+        <h1 class="text-4xl font-bold text-gray-900 tracking-tight">
+          Thank You for Your Inquiry!
+        </h1>
+        <p class="text-xl text-gray-600 max-w-lg leading-relaxed">
+          We have received your message and will get back to you as soon as
+          possible.
+        </p>
+        <div class="mt-8 border-t border-sky-100 pt-8 w-full">
+          <div class="flex flex-col sm:flex-row justify-center gap-6">
+            <a
+              href="/"
+              class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg text-white bg-sky-600 hover:bg-sky-700 transition-all transform hover:-translate-y-1 shadow-sm hover:shadow"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              Return to Home
+            </a>
+            <a
+              href="/products/page/1"
+              class="inline-flex items-center justify-center px-8 py-4 border border-sky-200 text-base font-medium rounded-lg text-sky-700 bg-white hover:bg-sky-50 transition-all transform hover:-translate-y-1 shadow-sm hover:shadow"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-2 text-sky-500"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                ></path>
+              </svg>
+              Browse Products
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <FooterCTA />
+  <Footer />
+  <Globals />
+</Layout>
