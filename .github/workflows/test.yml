@@ -1,0 +1,67 @@
+name: Unpack to Public
+
+on:
+  push:
+    paths:
+      - 'public/**'
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # 允许提交更改
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Identify Changed Files
+        id: changed_files
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^public/.*\.\(zip\|tar\.gz\|tgz\|gz\)$' > /tmp/compressed_files.txt || true
+          if [ -s /tmp/compressed_files.txt ]; then
+            echo "has_compressed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Unpack Archives
+        if: steps.changed_files.outputs.has_compressed == 'true'
+        run: |
+          while IFS= read -r file; do
+            dir=$(dirname "$file")
+            mkdir -p /tmp/extract
+            case "$file" in
+              *.zip)
+                unzip -q "$file" -d /tmp/extract
+                ;;
+              *.tar.gz|*.tgz)
+                tar -xzf "$file" -C /tmp/extract
+                ;;
+              *.gz)
+                # 假设是单个 .gz 文件
+                gunzip -c "$file" > /tmp/extract/$(basename "${file%.gz}")
+                ;;
+              *)
+                echo "Unsupported format: $file"
+                continue
+                ;;
+            esac
+
+            # 覆盖 public 目录内容
+            rsync -av --ignore-existing /tmp/extract/ "$dir/"
+            echo "Unpacked $file to $dir"
+
+            # 清理临时目录
+            rm -rf /tmp/extract/*
+          done < /tmp/compressed_files.txt
+
+      - name: Commit and Push Changes
+        if: steps.changed_files.outputs.has_compressed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/
+          git status
+          git commit -m "feat: auto unpack archives to public" || echo "No changes to commit"
+          git push origin ${{ github.ref }}
