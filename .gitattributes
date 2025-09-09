@@ -1,0 +1,8 @@
+# 自动检测文本文件并执行LF标准化
+* text=auto eol=lf
+
+# 声明特定文件类型的文本属性
+*.{js,jsx,ts,tsx,astro,json,md,mdx,css,scss,html} text eol=lf
+
+# 二进制文件
+*.{png,jpg,jpeg,gif,webp,woff,woff2} binary

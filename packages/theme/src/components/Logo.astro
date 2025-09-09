@@ -1,0 +1,18 @@
+---const {
+  src,
+  darkSrc,
+  alt = "",
+  title = "Logo",
+  class: className,
+} = Astro.props;---
+
+<div class:list={["flex", className]}>
+  <a class="p-1.5 flex items-end gap-2 text-foreground" href="/">
+    <!--  只有只读设备显示  -->
+    <span class="sr-only">
+      {title}
+    </span>
+    <img class="h-10 w-auto hidden dark:block scrolled:h-9 transition-all" alt={alt} src={darkSrc} />
+    <img class="h-10 w-auto dark:hidden scrolled:h-9 transition-all" alt={alt} src={src} />
+  </a>
+</div>
