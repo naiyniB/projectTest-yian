@@ -1,0 +1,85 @@
+name: Extract and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # 保留 .git 目录以便后续提交
+          fetch-depth: 0
+
+      - name: Create temp directory
+        run: mkdir -p temp
+
+      - name: Find and extract archive from public
+        run: |
+          # 支持 zip, tar.gz 等格式，可根据实际调整
+          ARCHIVE=$(find public -type f $$ -name "*.zip" $$ -name "*.tar.gz" $$ -name "*.tgz" -print -quit)
+          if [ -z "$ARCHIVE" ]; then
+            echo "No archive found in public/"
+            exit 1
+          fi
+
+          echo "Found archive: $ARCHIVE"
+          if [[ "$ARCHIVE" == *.zip ]]; then
+            unzip "$ARCHIVE" -d temp/
+          elif [[ "$ARCHIVE" == *.tar.gz || "$ARCHIVE" == *.tgz ]]; then
+            tar -xzf "$ARCHIVE" -C temp/
+          else
+            echo "Unsupported archive format: $ARCHIVE"
+            exit 1
+          fi
+
+      - name: Remove all root files/dirs except .github, public, temp, .git
+        run: |
+          # 列出根目录下所有条目
+          for item in */; do
+            dir="${item%/}"
+            case "$dir" in
+              .git|.github|public|temp)
+                echo "Skipping $dir"
+                ;;
+              *)
+                echo "Removing $dir"
+                rm -rf "$dir"
+                ;;
+            esac
+          done
+
+          # 清理非目录文件（如 README.md 等）
+          find . -maxdepth 1 -type f $$ -not -path "./.git/*" $$ -not -path "./.github/*" | while read file; do
+            echo "Removing file: $file"
+            rm -f "$file"
+          done
+
+      - name: Move contents of temp to root
+        run: |
+          # 移动 temp 内所有子项到根目录
+          mv temp/* ./ || true
+          mv temp/.* ./ 2>/dev/null || true  # 可选：移动隐藏文件（如 .env）
+
+      - name: Clean up public and temp
+        run: |
+          rm -rf public temp
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 检查是否有更改
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git add -A
+          git commit -m "Deploy: extracted and replaced root content [skip ci]"
+          git push origin main
