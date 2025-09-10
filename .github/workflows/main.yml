@@ -1,0 +1,67 @@
+name: Unpack and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unpack-and-clean:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Find ZIP in public/
+        id: find_zip
+        run: |
+          ZIP_FILE=$(find public -maxdepth 1 -name "*.zip" | head -n 1)
+          if [ -n "$ZIP_FILE" ]; then
+            echo "zip_file_path=$ZIP_FILE" >> $GITHUB_OUTPUT
+            echo "📦 Found ZIP: $ZIP_FILE"
+          else
+            echo "❌ No zip file found in public/"
+            exit 1
+          fi
+
+      - name: Extract to temp directory
+        run: |
+          unzip "${{ steps.find_zip.outputs.zip_file_path }}" -d ./temp_extracted
+
+      - name: Clean root directory (keep .github, .git, public)
+        run: |
+          # 列出所有根目录项，排除 .github、.git、public
+          echo "🗑️ Removing all except .github, .git, public..."
+          find . -mindepth 1 -maxdepth 1 \( \
+            -name '.github' -o \
+            -name '.git' -o \
+            -name 'public' \
+          \) -prune -o -exec rm -rf {} + || true
+
+          # 将解压内容移动到根目录
+          mv temp_extracted/* ./ || true
+          rm -rf temp_extracted
+
+      - name: Delete public directory (after use)
+        run: |
+          rm -rf public
+          echo "🗑️ public/ directory removed."
+
+      - name: Commit changes if any
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 检查是否有变更
+          if ! git status --porcelain | grep -q .; then
+            echo "✅ No changes to commit."
+            exit 0
+          fi
+
+          git add .
+          git commit -m "feat: unpacked content from zip and cleaned workspace"
+          git push origin main
