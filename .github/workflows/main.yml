@@ -1,109 +1,72 @@
-name: Process Public Archive
+# .github/workflows/cleanup-and-extract.yml
+
+name: 解压安装包并清理根目录
 
 on:
   push:
     branches:
-      - main  # 改成你的分支名，如 master
+      - main
     paths:
-      - 'public/**'
+      - 'public/**'  # 只有当 public 目录发生变化时才触发
 
 jobs:
-  process-archive:
+  cleanup-and-extract:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
-      - name: Find New Archive in public/
-        id: find_archive
+      - name: List current root contents
         run: |
-          # 获取本次提交中 public/ 下的压缩包（排除特定路径）
-          CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r HEAD | grep "^public/" | grep -E "\.(zip|tar\.gz|tgz|tar)$" | grep -v "^public/\.\(github\|xxx\)/")
+          echo "Root contents before:"
+          ls -la
 
-          if [ -z "$CHANGED_FILES" ]; then
-            echo "No archive file found in public/"
-            exit 0
-          fi
-
-          # 取最后一个（最新）的压缩包
-          LATEST_ARCHIVE=$(echo "$CHANGED_FILES" | tail -n 1)
-          echo "archive_path=$LATEST_ARCHIVE" >> $GITHUB_OUTPUT
-          echo "Found: $LATEST_ARCHIVE"
-        shell: bash
-
-      - name: Extract and Replace Root
-        if: steps.find_archive.outputs.archive_path != ''
+      - name: Remove all root contents except .github and public
         run: |
-          ARCHIVE="./${{ steps.find_archive.outputs.archive_path }}"
+          # 移除根目录中除 .github 和 public 外的所有文件和目录
+          find . -maxdepth 1 -not -name '.' -not -name '.github' -not -name 'public' -exec rm -rf {} +
 
-          if [ ! -f "$ARCHIVE" ]; then
-            echo "Archive not found: $ARCHIVE"
-            exit 1
-          fi
+      - name: List public contents
+        run: |
+          echo "Contents in public/:"
+          ls -la public/
 
-          # 要保留的目录（不删除）
-          KEEP_DIRS=( ".github" "public" "xxx" )  # 添加你需要保留的文件夹
-
-          # 删除根目录下其他所有文件和文件夹
-          for item in ./*; do
-            [ -e "$item" ] || continue
-            ITEM_NAME="${item#./}"
-            should_keep=false
-            for keep in "${KEEP_DIRS[@]}"; do
-              if [ "$ITEM_NAME" = "$keep" ]; then
-                should_keep=true
-                break
-              fi
-            done
-            if [ "$should_keep" = false ]; then
-              rm -rf "$item"
+      - name: Find and extract zip files from public to root
+        run: |
+          # 查找 public 目录下的所有 .zip 文件并解压到根目录
+          for zip_file in public/*.zip; do
+            if [ -f "$zip_file" ]; then
+              echo "Extracting $zip_file to root..."
+              unzip "$zip_file" -d .
             fi
           done
 
-          # 创建临时解压目录
-          TMP_UNZIP="./tmp_unzip"
-          mkdir -p "$TMP_UNZIP"
-
-          # 根据类型解压
-          case "$ARCHIVE" in
-            *.zip)
-              unzip -q "$ARCHIVE" -d "$TMP_UNZIP"
-              ;;
-            *.tar.gz|*.tgz)
-              tar -xzf "$ARCHIVE" -C "$TMP_UNZIP"
-              ;;
-            *.tar)
-              tar -xf "$ARCHIVE" -C "$TMP_UNZIP"
-              ;;
-            *)
-              echo "Unsupported format: $ARCHIVE"
-              exit 1
-              ;;
-          esac
-
-          # 移动解压内容到根目录
-          mv "$TMP_UNZIP"/* ./
-          mv "$TMP_UNZIP"/.* ./ 2>/dev/null || true  # 忽略 . 或 .. 错误
-          rm -rf "$TMP_UNZIP"
-
-          echo "Successfully extracted and replaced root."
-
-      - name: Clean Public Directory
+      - name: Optional: Support other archive types (tar, gz, etc.)
         run: |
-          # 清空 public/，保留 .gitkeep（如果存在）
-          find public -mindepth 1 ! -name '.gitkeep' -exec rm -rf {} + 2>/dev/null || true
+          # 示例：支持 .tar.gz
+          for tar_file in public/*.tar.gz; do
+            if [ -f "$tar_file" ]; then
+              echo "Extracting $tar_file to root..."
+              tar -xzf "$tar_file" -C .
+            fi
+          done
 
-      - name: Commit and Push Changes
+      - name: Clear contents of public (keep the directory)
+        run: |
+          echo "Removing files inside public/..."
+          find public -mindepth 1 -delete
+
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add -A
-          if ! git diff-index --quiet HEAD --; then
-            git commit -m "feat: update root from latest archive in public"
-            git push
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
           else
-            echo "No changes to commit."
+            git commit -m "🧹 Clean up and extract from public"
+            git push origin main
           fi
