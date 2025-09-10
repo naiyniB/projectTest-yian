@@ -1,0 +1,79 @@
+name: Unpack and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unpack-and-clean:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Find ZIP in public/
+        id: find_zip
+        run: |
+          ZIP_FILE=$(find public -maxdepth 1 -name "*.zip" | head -n 1)
+          if [ -n "$ZIP_FILE" ]; then
+            echo "zip_file_path=$ZIP_FILE" >> $GITHUB_OUTPUT
+            echo "📦 Found ZIP: $ZIP_FILE"
+          else
+            echo "❌ No zip file found in public/"
+            exit 1
+          fi
+
+      - name: Create temp directory
+        run: |
+          mkdir -p temp
+          echo "📁 Created temp/ directory."
+
+      - name: Extract zip to temp/
+        run: |
+          unzip "${{ steps.find_zip.outputs.zip_file_path }}" -d ./temp
+          echo "✅ Zip extracted to ./temp/"
+
+      - name: Clean root: keep only .git .github public temp
+        run: |
+          echo "🗑️ Removing all except .git, .github, public, temp..."
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name '.git' \
+            ! -name '.github' \
+            ! -name 'public' \
+            ! -name 'temp' \
+            -exec rm -rf {} + || true
+          echo "✅ Root cleaned."
+
+      - name: Move temp contents to root
+        run: |
+          if [ -d "temp" ] && [ "$(ls -A temp)" ]; then
+            mv temp/* ./ || true
+            echo "✅ Moved temp/ contents to root."
+          else
+            echo "⚠️ temp/ is empty or does not exist."
+          fi
+
+      - name: Remove public and temp directories
+        run: |
+          rm -rf public temp
+          echo "🗑️ Removed public/ and temp/ directories."
+
+      - name: Commit changes if any
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Check if there are changes
+          if ! git diff-index --quiet HEAD; then
+            git add .
+            git commit -m "feat: unpacked content from zip and refreshed workspace"
+            git push origin main
+            echo "✅ Changes committed and pushed."
+          else
+            echo "✅ No changes detected, nothing to commit."
+          fi
