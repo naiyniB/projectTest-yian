@@ -1,0 +1,7 @@
+@import "@rxdrag/slate-preview/dist/style.css"; 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
