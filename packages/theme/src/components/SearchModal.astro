@@ -1,0 +1,74 @@
+---
+import { Modal, ModalCloser, ModalPanel } from "@rxdrag/website-lib";
+import { SearchInput } from "@rxdrag/website-lib-core";
+
+interface Props {
+  title?: string;
+}
+const { title } = Astro.props;---
+
+<Modal openableKey="search-modal">
+  <ModalCloser
+    class:list={[
+      "fixed inset-0 bg-black/30 backdrop-blur-md z-20 isolate",
+      "opacity-0 pointer-events-none  open:pointer-events-auto",
+    ]}
+    whileOpenable={{
+      initial: {
+        opacity: 0,
+      },
+      open: {
+        to: {
+          opacity: 1,
+        },
+      },
+      close: {
+        to: {
+          opacity: 0,
+        },
+      },
+    }}
+  />
+  <ModalPanel
+    class:list={[
+      "fixed left-1/2 transform -translate-x-1/2 top-0 mt-20 max-w-xl space-y-4 bg-white px-4 py-2 rounded-lg w-full z-50 isolate",
+      "opacity-0 pointer-events-none open:pointer-events-auto",
+    ]}
+    whileOpenable={{
+      initial: {
+        opacity: 0,
+        y: -100,
+      },
+      open: {
+        to: {
+          opacity: 1,
+          y: 0,
+        },
+      },
+      close: {
+        to: {
+          opacity: 0,
+          y: -100,
+        },
+      },
+    }}
+  >
+    <form method="get" action="/search" class="flex items-center">
+      <SearchInput
+        name="q"
+        className="block w-full appearance-none bg-transparent text-base text-slate-900 placeholder:text-slate-600 outline-none border-none ring-0 focus:outline-none focus:ring-0"
+        placeholder={title || "Find products..."}
+      />
+      <button type="submit" class="hover:bg-slate-50 p-2 rounded">
+        <svg
+          class="pointer-events-none h-6 w-6 fill-slate-400"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M20.47 21.53a.75.75 0 1 0 1.06-1.06l-1.06 1.06Zm-9.97-4.28a6.75 6.75 0 0 1-6.75-6.75h-1.5a8.25 8.25 0 0 0 8.25 8.25v-1.5ZM3.75 10.5a6.75 6.75 0 0 1 6.75-6.75v-1.5a8.25 8.25 0 0 0-8.25 8.25h1.5Zm6.75-6.75a6.75 6.75 0 0 1 6.75 6.75h1.5a8.25 8.25 0 0 0-8.25-8.25v1.5Zm11.03 16.72-5.196-5.197-1.061 1.06 5.197 5.197 1.06-1.06Zm-4.28-9.97c0 1.864-.755 3.55-1.977 4.773l1.06 1.06A8.226 8.226 0 0 0 18.75 10.5h-1.5Zm-1.977 4.773A6.727 6.727 0 0 1 10.5 17.25v1.5a8.226 8.226 0 0 0 5.834-2.416l-1.061-1.061Z"
+          ></path>
+        </svg></button
+      >
+    </form>
+  </ModalPanel>
+</Modal>
