@@ -1,1 +1,0 @@
-export const FORM_SALT = "c1dbc5f3-4d34-4079-b48d-b60545ec85b0";
