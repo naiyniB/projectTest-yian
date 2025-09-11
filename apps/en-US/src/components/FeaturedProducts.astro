@@ -1,0 +1,20 @@
+---
+import { rx } from "theme";
+
+const featuredProducts = await rx.getFeaturedProducts();
+interface Props {
+  ctaTitle?: string;
+}
+const { ctaTitle } = Astro.props;---
+
+<div
+  class:list={[
+    "self-center grid gap-4 p-4 border border-divider rounded-md grid-cols-1 lg:grid-cols-2",
+  ]}
+>
+  {
+    featuredProducts?.map((product) => (
+      <ProductCard product={product} ctaTitle={ctaTitle} />
+    ))
+  }
+</div>
