@@ -1,0 +1,72 @@
+---
+import { PageType } from "@rxdrag/rxcms-models";
+import Layout from "@/layouts/Layout.astro";
+import { rx } from "theme";
+import dayjs from "dayjs";
+import { rxPage } from "@rxdrag/website-lib-core";
+import { Meta, RichTextView, Link } from "@rxdrag/website-lib";
+import { Header, BreadcrumbCTA, Breadcrumb, FooterCTA, Footer, Globals } from "theme";
+
+export async function getStaticPaths() {
+  return await rx.getUserPaths();
+}
+const { id } = Astro.params;
+if (!id) {
+  return Astro.redirect("/404");
+}
+const user = await rx.getOneUser(id);
+if (!user) {
+  return Astro.redirect("/404");
+}
+const posts = await rx.getUserPosts(id);
+const breadcrumbs = rxPage.breadcrumbs("Profile", "Home");
+const meta = (await rx.getPageByType(PageType.Profile))?.meta;---
+
+<Layout>
+  <Meta title={user?.name || " Profile"} slot="meta" content={meta} />
+  <Header />
+  <BreadcrumbCTA title="Profile" />
+  <Breadcrumb items={breadcrumbs} />
+  <section class="m-h-20 w-full">
+    <div class="container mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-gray-50 p-8 rounded-lg flex flex-col gap-8">
+        <div class="flex items-center gap-4">
+          <img
+            class="h-20 w-20 rounded-full bg-gray-50"
+            src={user?.avatar?.thumbnail}
+            alt={user?.name}
+          />
+          <span class="text-lg font-semibold">{user?.name}</span>
+        </div>
+        <div class="flex flex-col">
+          <h2 class="text-lg font-semibold">About</h2>
+        </div>
+        <div class="max-w-3xl prose">
+          <RichTextView value={user?.profile} />
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <h2 class="text-xl">Posts</h2>
+        <div class="mt-4 flex flex-col gap-4">
+          {
+            posts?.map((post) => (
+              <div class="flex flex-col gap-0">
+                <Link type="post" to={post?.slug} target="_blank">
+                  <span class="text-sm  leading-6 text-gray-900">
+                    {post?.title}
+                  </span>
+                </Link>
+                <span class="mt-1 flex items-center gap-x-2 text-xs leading-5 text-gray-500">
+                  {dayjs(post?.createdAt)?.format("MMMM D, YYYY")}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+  <FooterCTA />
+  <Footer />
+  <Globals />
+</Layout>
