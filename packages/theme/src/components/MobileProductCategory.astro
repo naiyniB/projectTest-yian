@@ -1,0 +1,39 @@
+---
+import { type TProductCategory } from "@rxdrag/website-lib-core";
+import { Link } from "@rxdrag/website-lib";
+
+interface Props {
+  category?: TProductCategory;
+}
+const { category } = Astro.props;---
+
+<div>
+  <Link
+    class:list={[
+      "block p-2 text-gray-900 leading-6 rounded-lg actived:text-primary-600 disabled:opacity-50",
+      "hover:bg-gray-50 hover:text-primary-600",
+      "italic",
+    ]}
+    type="product-category"
+    to={category?.slug}
+  >
+    {category ? category?.name : "no category"}
+  </Link>
+  <div>
+    {
+      category?.products?.map((product) => {
+        return (
+          <Link
+            class:list={[
+              "w-full rounded-md flex items-center gap-x-2 text-gray-500 p-2 hover:bg-gray-50 hover:text-sky-600",
+            ]}
+            type="product"
+            to={product.slug}
+          >
+            {product.title}
+          </Link>
+        );
+      })
+    }
+  </div>
+</div>

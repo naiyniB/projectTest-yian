@@ -1,0 +1,27 @@
+---
+import { Link } from "@rxdrag/website-lib";
+
+interface Props {
+  separator?: string;
+  items?: TBreadcrumbItem[];
+}
+const { separator = "/", items = [] } = Astro.props;---
+
+<section class="z-10 flex">
+  <ul class="container flex items-center space-x-2 text-sm text-gray-500 py-4">
+    {
+      items.map((item, index) => (
+        <>
+          <li class="breadcrumb-item">
+            {item.href ? <Link to={item.href}>{item.title}</Link> : <span class="text-gray-800">{item.title}</span>}
+          </li>
+          {index < items.length - 1 && (
+            <li class="breadcrumb-separator text-gray-400">
+              {separator}
+            </li>
+          )}
+        </>
+      ))
+    }
+  </ul>
+</section>

@@ -1,7 +1,159 @@
 ---
 import Layout from "@/layouts/Layout.astro";
----
+import { rx } from "theme";
+import { Meta, Motion, Link } from "@rxdrag/website-lib";
+import { Icon } from "@rxdrag/website-lib-core";
+import { Header, HomeHero, FeaturedProducts, LastedPosts, FooterCTA, Footer, Globals } from "theme";
+const page = await rx.getHomePage();
+const meta = page?.meta;---
 
-<h1 className="text-2xl font-bold leading-9 tracking-tight text-gray-900 home:text-white">
-  Heading 1
-</h1>
+<Layout>
+  <Meta slot="meta" content={meta} />
+  <Header dark={true} />
+  <HomeHero title="Pool & Spa Chemicals" features={[
+      "High Quality",
+      "Quick Response",
+      "Good After-sale Service",
+      "Supplying the world",
+    ]} ctaTitle="ASK FOR QUOTE NOW !" backgroundImage="https://yizhanfei-prod1.oss-us-west-1.aliyuncs.com/75897279-c529-47bd-bb37-49ae39ac5899.jpg" />
+  <section class="m-h-20 w-full">
+    <div class="container lg:mt-24 mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-24 gap-4">
+      <Motion class="flex flex-col" whileInView="fade-up">
+        <h2 class="text-xl leading-[3rem] font-bold tracking-tight text-gray-900">
+          High quality Pool&Spa water treatment chemicals supplier
+        </h2>
+        <p class="mt-6 text-gray-600">
+          <span class="text-4xl font-bold text-sky-600">
+            A
+          </span>
+          s your Chinese
+          partner for Pool & Spa chemicals, Qingdao Kingnod Group Co.,Ltd.
+          supplies TCCA, SDIC, Calcium hypochlorite, BCDMH, PHMG, PHMB, PH+,
+          PH-, water tests, etc. We are trusted by more than 200 customers from
+          more than 30 countries.
+        </p>
+        <ul class="mt-8 leading-8 text-gray-600 flex flex-col gap-4">
+          <li class="flex items-start">
+            <span class="mr-4 mt-1.5">
+              <Icon icon="ri:checkbox-line" className="text-primary size-6" client:load />
+            </span>
+            Established in 2007, we specialize in the production and export of water
+            treatment chemicals.
+          </li>
+          <li class="flex items-start">
+            <span class="mr-4 mt-1.5">
+              <Icon icon="ri:checkbox-line" className="text-primary size-6" client:load />
+            </span>
+            You can obtain a wide range of products, including disinfectants, water
+            balance chemicals, algicides, flocculants, water tests, etc.
+          </li>
+          <li class="flex items-start">
+            <span class="mr-4 mt-1.5">
+              <Icon icon="ri:checkbox-line" className="text-primary size-6" client:load />
+            </span>
+            Packing products into various small packages to your specifications.
+            We are the leading repackager of swimming pool and spa chemicals in China.
+          </li>
+          <li class="flex items-start">
+            <span class="mr-4 mt-1.5">
+              <Icon icon="ri:checkbox-line" className="text-primary size-6" client:load />
+            </span>
+            Passed ISO 9001:2008 edition quality assurance to manage systematic attestation,
+            and assisted our business partners in completing BPR registration and
+            provide a better service for customers in Europe.
+          </li>
+          <li class="flex items-start">
+            <span class="mr-4 mt-1.5">
+              <Icon icon="ri:checkbox-line" className="text-primary size-6" client:load />
+            </span>
+            Free samples are available, so you can test before loading.
+          </li>
+        </ul>
+        <div class="mt-2 -mr-8 pb-10 flex gap-2 items-center justify-end pr-4 lg:pr-0">
+          <Link class="text-primary" to={"/about"}>
+            More info ...
+          </Link>
+        </div>
+      </Motion>
+      <Motion whileInView={{ preset: "fade-up", once: true }}>
+        <FeaturedProducts ctaTitle="Get a quote" />
+      </Motion>
+    </div>
+  </section>
+  <LastedPosts title="Latest Articles" detailTitle="Read this post" count={2} />
+  <section class="lg:py-24 py-6 border-t">
+    <div class="mx-auto max-w-2xl text-center">
+      <Motion class="flex justify-center" whileInView="fade-up">
+        <h2 class="block-title">
+          What Customer's Say
+        </h2>
+      </Motion>
+    </div>
+    <Motion class="mx-auto max-w-7xl px-6 lg:px-8 mt-4 lg:mt-20" whileInView="fade-up">
+      <div class="mx-auto grid max-w-2xl grid-cols-1 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+        <div class="flex flex-col pb-10 sm:pb-16 lg:pb-0 lg:pr-8 xl:pr-20">
+          <figure class="mt-10 flex flex-auto flex-col justify-between">
+            <blockquote class="text-md leading-8 text-gray-900">
+              <i>
+                <p>
+                  “The SDIC FCL arrived yesterday and we are working through it,
+                  all seems good on this delivery, we are happy with this
+                  delivery, thank you.
+                </p>
+                <p>
+                  we received the Calcium hypochlorite container today,and we
+                  are happy with the delivery,they look very nice.”
+                </p>
+              </i>
+            </blockquote>
+            <figcaption class="mt-10 flex items-center gap-x-6">
+              <div class="text-base">
+                <div class="font-semibold text-gray-900">
+                  Alessandro
+                </div>
+                <i class="mt-1 text-gray-500">
+                  From Italy
+                </i>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="flex flex-col border-t border-gray-900/10 pt-10 sm:pt-16 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 xl:pl-20">
+          <figure class="mt-10 flex flex-auto flex-col justify-between">
+            <blockquote class="text-md leading-8 text-gray-900">
+              <i>
+                <p>
+                  "Yes it arrived last week and it seems ok, I will look at the
+                  material later today.
+                </p>
+                <p>
+                  We took delivery on Friday and yesterday, we are still sorting
+                  it out but it looks ok.
+                </p>
+                <p>
+                  Thank you Rebecca, everything is ok now!
+                </p>
+                <p>
+                  ......"
+                </p>
+              </i>
+            </blockquote>
+            <figcaption class="mt-10 flex items-center gap-x-6">
+              <div class="text-base">
+                <div class="font-semibold text-gray-900">
+                  Alex Israel
+                </div>
+                <i class="mt-1 text-gray-500">
+                  From United Kingdom
+                </i>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </Motion>
+  </section>
+  <FooterCTA />
+  <Footer />
+  <Globals />
+</Layout>
