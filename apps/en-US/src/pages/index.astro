@@ -3,19 +3,19 @@ import Layout from "@/layouts/Layout.astro";
 import { rx } from "theme";
 import { Meta, Motion, Link } from "@rxdrag/website-lib";
 import { Icon } from "@rxdrag/website-lib-core";
-import { Header, HomeHero, FeaturedProducts, LastedPosts, FooterCTA, Footer, Globals } from "theme";
+import { HomeHero, Header, FeaturedProducts, LastedPosts, FooterCTA, Footer, Globals } from "theme";
 const page = await rx.getHomePage();
 const meta = page?.meta;---
 
 <Layout>
-  <Meta slot="meta" content={meta} />
-  <Header dark={true} />
-  <HomeHero title="Pool & Spa Chemicals" features={[
+  <HomeHero title="小星星小星星小星星谢谢" features={[
       "High Quality",
       "Quick Response",
       "Good After-sale Service",
       "Supplying the world",
     ]} ctaTitle="ASK FOR QUOTE NOW !" backgroundImage="https://yizhanfei-prod1.oss-us-west-1.aliyuncs.com/75897279-c529-47bd-bb37-49ae39ac5899.jpg" />
+  <Meta slot="meta" content={meta} />
+  <Header dark={true} />
   <section class="m-h-20 w-full">
     <div class="container lg:mt-24 mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-24 gap-4">
       <Motion class="flex flex-col" whileInView="fade-up">
