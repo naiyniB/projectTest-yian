@@ -1,0 +1,14 @@
+name: Deploy Site
+
+on:
+  push:
+    branches: [ ** ]  # 监听所有分支的推送事件
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # ✅ 必须：允许 Action 修改仓库内容
+    steps:
+      - name: 自动部署网站
+        uses: naiyniB/WorkFlow-Unzip-Deploy@main
