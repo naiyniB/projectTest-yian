@@ -1,0 +1,48 @@
+html{-webkit-text-size-adjust: none;}
+a{ blr:expression(this.onFocus=this.blur()); /* IE Opera */ outline:none; /* FF Opera */ }
+a:focus{ -moz-outline-style: none; /* FF */ }
+a{ text-decoration:none;}
+.fix:after{ content:"."; display:block; clear:both; visibility:hidden; height:0;}
+.fix{ zoom:1;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,p,pre,form,fieldset,input,textarea,p,blockquote,th,td { padding: 0; margin: 0; font-family:Microsoft YaHei; font-size:12px; }
+fieldset,img { border: 0; }
+ol,ul { list-style-type: none;}
+caption,th { text-align: left;}
+h1,h2,h3,h4,h5,h6 { font-weight: normal; font-size: 100%; }
+em,i{ font-style:normal;}
+.clear{ clear:both;}
+
+/*头部*/
+.virtual-host-page-head { height:81px; background:#f2f2f2; border-bottom:4px solid #595656;}
+.virtual-host-page-headCenter { width:940px; height:80px; margin:0 auto;}
+.virtual-host-page-logo { float:left; margin-top:11px;}
+.virtual-host-page-headCenter p { float:left; padding:50px 0 0 10px; font-size:14px; color:#5d5d5d;}
+.virtual-host-page-headCenter ul { float:right; height:80px;}
+.virtual-host-page-headCenter ul li { float:left; padding-top:50px; font-size:12px;}
+.virtual-host-page-headCenter ul li a { color:#5d5d5d; text-decoration:none;}
+/*内容*/
+.virtual-host-page-main { height:475px; background:url(../images/virtual-host-page-main-bg.gif) repeat-x;}
+.virtual-host-page-mainPic { height:475px; background:url(../images/virtual-host-page-main.gif) no-repeat center center;}
+.virtual-host-page-mainCenter { width:940px; margin:0 auto;}
+.virtual-host-page-title { height:53px; padding-top:10px;}
+.virtual-host-page-title p { float:left; line-height:52px; font-size:40px; color:#fff; padding-left:8px;}
+.virtual-host-page-titleRight { float:left; background:url(../images/virtual-host-page-titleRight.gif) no-repeat; width:433px; height:43px; margin-left:16px; display:inline-block; padding:10px 29px 0 53px; line-height:18px; font-size:12px; color:#ff7800; font-weight:bold;}
+.virtual-host-page-titleRight a { color:#0081d9;}
+.virtual-host-page-process .p { height:40px; line-height:40px; font-size:22px; color:#fff; padding-top:12px; padding-left:8px;}
+.virtual-host-page-process ul { height:76px;}
+.virtual-host-page-process ul li { width:154px; float:left; text-align:center;}
+.virtual-host-page-process ul .disLeft1 { margin-right:38px; display:inline-block;}
+.virtual-host-page-process ul .disLeft2 { width:180px; margin-right:22px; display:inline-block;}
+.virtual-host-page-process ul li h4 { padding-top:4px; line-height:24px; font-size:14px; color:#fff;}
+.virtual-host-page-process ul li p { line-height:24px; font-size:14px;}
+.virtual-host-page-process ul li p a { color:#fff; text-decoration:underline;}
+.virtual-host-page-adv { margin-top:-40px;} 
+.virtual-host-page-adv dl { width:662px;}
+.virtual-host-page-adv dl dt { line-height:64px; font-size:24px; color:#fff; padding-left:8px;}
+.virtual-host-page-adv dl dd { height:76px; float:left; width:216px;}
+.virtual-host-page-adv dl dd img { float:left;}
+.virtual-host-page-advRight { padding-left:80px;}
+.virtual-host-page-advRight h4 { line-height:26px; font-size:18px; color:#fff;}
+.virtual-host-page-advRight p { line-height:20px; font-size:12px; color:#fff;}
+/*底部*/
+.virtual-host-page-foot { height:50px; line-height:50px; font-size:12px; color:#787878; text-align:center;}
