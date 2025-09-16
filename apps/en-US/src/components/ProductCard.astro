@@ -1,0 +1,36 @@
+---
+import { Link } from "@rxdrag/website-lib";
+import EnquiryTrigger from "@/components/EnquiryTrigger.astro";
+
+interface Props {
+  ctaTitle?: string;
+  product?: TProduct;
+}
+const { product, ctaTitle } = Astro.props;---
+
+<div
+  class:list={[
+    "group relative flex flex-col p-4 border rounded border-gray-100 bg-gray-50 gap-2",
+  ]}
+>
+  <Link type="product" to={product?.slug}>
+    <div
+      class="relative w-full aspect-[1/1] overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75"
+    >
+      <img
+        class="min-h-20 w-full h-full bg-gray-50 object-cover"
+        src={product?.cover?.resize || ""}
+        alt={product?.title || "Product image"}
+      />
+    </div>
+    <h3 class="mt-4 text-sm text-gray-700">
+      {product?.shortTitle || product?.title}
+    </h3>
+  </Link>
+  <EnquiryTrigger
+    class="w-full btn btn-primary"
+    callToAction={`Product Card - ${product?.title}`}
+  >
+    {ctaTitle || "Get a quote"}
+  </EnquiryTrigger>
+</div>

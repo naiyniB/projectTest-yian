@@ -1,0 +1,79 @@
+---
+import { Link, ModalTrigger } from "@rxdrag/website-lib";
+import { Icon } from "@rxdrag/website-lib-core";
+import Langs from "@/components/Langs.astro";
+import { Logo, ProductsPopover, MobileMenu, ProductsCollapse, SearchModal } from "theme";
+interface Props {
+  dark?: boolean;
+}
+const { dark } = Astro.props;---
+
+<header class:list={[{ dark: dark }]}>
+  <div class:list={[
+      "fixed w-full max-w-screen px-0 top-0 left-0 z-10",
+      "scrolled:bg-header-sticky scrolled:backdrop-blur-xl scrolled:shadow-lg",
+    ]}>
+    <nav aria-label="Header navigation" class:list={[
+        "relative w-full mx-auto max-w-screen-2xl px-8 2xl:px-0 flex items-center justify-between transition-all duration-500 h-[6rem]  scrolled:h-[5rem]",
+      ]}>
+      <div class="flex items-center w-[160px]">
+        <Logo alt="Kingnod Logo" darkSrc="https://yizhanfei-prod1.oss-accelerate.aliyuncs.com/d3b6234c-a05e-4618-9e4d-69d7155d077b.png" src="https://yizhanfei-prod1.oss-accelerate.aliyuncs.com/e7b1d6d8-4162-42b8-b386-cbcc11ec33dc.png" title="Kingnod" />
+      </div>
+      <div class="self-stretch hidden lg:flex gap-x-12 flex-1 justify-center">
+        <div class="flex items-center">
+          <Link class="desk-nav-link" to="/" activeWhen={true}>
+            Home
+          </Link>
+        </div>
+        <div class="flex items-center">
+          <Link class="desk-nav-link" to="/about" activeWhen={true}>
+            About
+          </Link>
+        </div>
+        <div class="flex items-center">
+          <ProductsPopover title="Products" columns={[[0], [1, 4], [2, 5], [3, 6]]} />
+        </div>
+        <div class="flex items-center">
+          <Link class="desk-nav-link" type="posts" activeWhen="/posts">
+            Blog
+          </Link>
+        </div>
+        <div class="flex items-center">
+          <Link class="desk-nav-link" to="/contact" activeWhen={true}>
+            Contact
+          </Link>
+        </div>
+      </div>
+      <div class="lg:justify-end items-center gap-4 hidden lg:flex">
+        <ModalTrigger as="button" openableKey="search-modal" class="text-foreground hover:text-foreground-hover outline-none p-1">
+          <Icon className="size-5" icon="iconoir:search" client:load />
+        </ModalTrigger>
+        <Langs />
+      </div>
+      <div class="flex lg:hidden text-foreground">
+        <ModalTrigger as="button" openableKey="mobile-menu" class="text-foreground hover:text-foreground-hover outline-none p-1">
+          <Icon className="size-6" icon="iconoir:menu" client:load />
+        </ModalTrigger>
+      </div>
+    </nav>
+  </div>
+  <MobileMenu>
+    <img alt="Kingnod Logo" class="h-8 w-auto transition-all" src="https://liaoker-storage.oss-cn-qingdao.aliyuncs.com/4299262263296/e00e8e1f-f906-4feb-bc28-094b1db910be.png" />
+    <div class="space-y-2 py-6 pl-2 flex flex-col gap-4">
+      <Link class="font-semibold" to="/" activeWhen={true}>
+        Home
+      </Link>
+      <Link class="font-semibold" to="/about" activeWhen={true}>
+        About
+      </Link>
+      <ProductsCollapse class="font-semibold" title="Products" />
+      <Link class="font-semibold" type="posts" activeWhen="/posts">
+        Blog
+      </Link>
+      <Link class="font-semibold" to="/contact" activeWhen={true}>
+        Contact
+      </Link>
+    </div>
+  </MobileMenu>
+  <SearchModal title="Find products..." />
+</header>

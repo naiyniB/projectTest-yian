@@ -1,0 +1,39 @@
+---
+import { PageType } from "@rxdrag/rxcms-models";
+import Layout from "@/layouts/Layout.astro";
+import { rx } from "theme";
+import { rxPage } from "@rxdrag/website-lib-core";
+import { Meta } from "@rxdrag/website-lib";
+import ProductsPage from "@/components/ProductsPage.astro";
+import { Globals } from "theme";
+
+// 从 props 获取分页信息
+const { currentPage, pageSize } = Astro.props;
+export async function getStaticPaths() {
+  // 获取分页路由列表
+  return await rx.getProductListPaths({
+    pageSize: 12,
+    category: undefined,
+  });
+}
+// 获取产品数据
+const products = await rx.getProducts(
+  {
+    category: undefined,
+    page: currentPage,
+    pageSize,
+  },
+  {
+    height: 500,
+    width: 500,
+  }
+);
+// 创建分页对象
+const pagination = rxPage.productsPagination(Astro.props);
+const meta = (await rx.getPageByType(PageType.ProductList))?.meta;---
+
+<Layout>
+  <Meta title="Products" slot="meta" content={meta} />
+  <ProductsPage products={products} pagination={pagination} />
+  <Globals />
+</Layout>

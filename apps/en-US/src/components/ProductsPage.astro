@@ -1,0 +1,34 @@
+---
+import { type TProductCategory } from "@rxdrag/website-lib-core";
+import { rxPage } from "@rxdrag/website-lib-core";
+import Header from "@/components/Header.astro";
+import BreadcrumbCTA from "@/components/BreadcrumbCTA.astro";
+import ProductCard from "@/components/ProductCard.astro";
+import Footer from "@/components/Footer.astro";
+import { Breadcrumb, Pagination, ProductCategries, FooterCTA } from "theme";
+
+interface Props {
+  breadcrumbItems?: TBreadcrumbItem[];
+  products?: TProduct[];
+  pagination?: PaginationData;
+  category?: TProductCategory;
+}
+const { products, pagination, category: propCategory } = Astro.props;
+const breadcrumbItems = rxPage.productListBreadcrumbs(propCategory);---
+
+<Header />
+<BreadcrumbCTA title={propCategory?.name || "Products"} />
+<Breadcrumb items={breadcrumbItems} />
+<section class="container mt-4 flex gap-16">
+  <div class="flex-1 space-y-8">
+    <div
+      class="self-center grid grid-cols-3 gap-4 p-4 border border-gray-200 rounded-md"
+    >
+      {products?.map((product) => <ProductCard product={product} />)}
+    </div>
+    {pagination && <Pagination pagination={pagination} />}
+  </div>
+  <ProductCategries activeSlug={propCategory?.slug} />
+</section>
+<FooterCTA />
+<Footer />

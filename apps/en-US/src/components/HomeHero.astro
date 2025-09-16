@@ -1,0 +1,80 @@
+---
+import { Motion, ModalTrigger } from "@rxdrag/website-lib";
+interface Props {
+  title: string;
+  features: string[];
+  ctaTitle: string;
+  backgroundImage?: string;
+}
+const { title, features, ctaTitle, backgroundImage } = Astro.props;---
+
+<section class="w-full h-screen relative flex flex-col min-h-[600px] max-h-[1000px] bg-[#004ea0] overflow-hidden">
+  <img fetchpriority="high" alt="Hero background" class="absolute inset-0 w-full h-full object-cover object-center z-0" src={backgroundImage} />
+  <div class="h-[7rem]" />
+  <div class="flex-1 flex justify-end">
+    <div class="h-full w-full md:w-2/3 lg:w-1/2 relative flex flex-col justify-center items-center px-6 lg:px-8">
+      <Motion as="div" class="bg-sky-800 bg-opacity-80 p-12 shadow-lg" animate={{
+          initial: {
+            opacity: 0,
+            y: 200,
+          },
+          to: {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "easeOut",
+          },
+        }}>
+        <h2 class="hero-item flex flex-col gap-4 text-3xl font-bold tracking-tight text-white sm:text-2xl md:text-3xl lg:text-2xl xl:text-4xl">
+          {title}
+        </h2>
+        <div class="flex flex-col gap-4 text-white mt-8 text-xl text-left pb-4 pl-8 font-bold">
+{
+            features.map((feature) => (<p class="hero-item text-lg flex items-center">
+            <span class="bg-white w-2 h-2 rounded-full mr-3" />
+            {feature}
+            </p>))
+          }
+        </div>
+        <div class="hero-item w-full justify-center flex items-center mt-4">
+          <ModalTrigger as="button" openableKey="enquiry-modal" class="btn btn-primary btn-lg primary-cradient shadow-sm" callToAction="Home page Enquiry on hero">
+            {ctaTitle}
+          </ModalTrigger>
+        </div>
+      </Motion>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { pageLoader } from "@rxdrag/website-lib-core";
+  import gsap from "gsap";
+
+  // 定义动画函数，以便重用
+  const animateHeroItems = () => {
+    const elements = document.querySelectorAll(".hero-item");
+    // 确保有元素存在
+    if (elements && elements.length > 0) {
+      gsap.fromTo(
+        elements,
+        {
+          opacity: 0,
+          y: 30,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          duration: 0.7,
+          ease: "power2.out",
+          overwrite: true,
+        }
+      );
+    }
+  };
+
+  // 页面首次加载时执行动画
+  pageLoader.onLoaded(() => {
+    animateHeroItems();
+  });
+</script>

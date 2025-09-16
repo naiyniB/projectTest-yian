@@ -1,0 +1,11 @@
+---
+interface Props {
+  class?: string;
+  value?: string;
+}
+const { class: className, value } = Astro.props;
+const items = value?.split("\n")---
+
+<ul class={className}>
+  {items.map((item) => <li>{item}</li>)}
+</ul>
