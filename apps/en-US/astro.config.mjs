@@ -28,7 +28,7 @@ export default defineConfig({
       },
     }),
   ],
-  output: "static",
+  output: "server",
   adapter: node({
     mode: "standalone", // 使用独立模式
   }), // 使用 Node.js 适配器
