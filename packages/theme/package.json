@@ -32,9 +32,9 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@rxdrag/rxcms-models": "^0.3.71",
-    "@rxdrag/website-lib-core": "^0.0.44",
-    "@rxdrag/website-lib": "^0.0.43",
+    "@rxdrag/rxcms-models": "^0.3.76",
+    "@rxdrag/website-lib-core": "^0.0.49",
+    "@rxdrag/website-lib": "^0.0.48",
     "dayjs": "^1.11.7",
     "clsx": "^2.1.0",
     "react": "^18.2.0",
