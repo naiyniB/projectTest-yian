@@ -1,0 +1,465 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { rxPage } from "@rxdrag/website-lib-core";
+import { rx } from "theme";
+import { Meta, Motion, AnimationNumber } from "@rxdrag/website-lib";
+import { Icon } from "@rxdrag/website-lib-core";
+import { Header, BreadcrumbCTA, Breadcrumb, IconLi, FooterCTA, Footer, Globals } from "theme";
+// Generate breadcrumbs
+const breadcrumbs = rxPage.breadcrumbs("About us", "Home");
+const meta = (await rx.getPageBySlug("about"))?.meta;---
+
+<Layout>
+  <Meta slot="meta" content={meta} />
+  <Header />
+  <BreadcrumbCTA title="About us">
+    <div>
+      Your professional water treatment chemicals
+      <b class="text-xl mx-2"> Supplier </b>
+      in China.
+    </div></BreadcrumbCTA
+  >
+  <Breadcrumb items={breadcrumbs} />
+  <Motion as="section" whileInView="fade-up" class="m-h-20 w-full">
+    <div class="container py-24">
+      <div class="mx-auto max-w-3xl lg:text-center">
+        <h2 class="text-2xl font-semibold leading-7 text-primary">
+          Meeting Your Requirements
+        </h2>
+        <p class="mt-6 text-lg leading-8 text-foreground-secondary">
+          With more than sixteen years experience in this field, we provide a
+          variety of swimming pool products in different sized packages to meet
+          your specific requirements.
+        </p>
+      </div>
+      <div class="mt-16 sm:mt-20 lg:mt-24">
+        <dl
+          class="grid max-w-xl grid-cols-1 gap-x-20 gap-y-16 lg:max-w-none lg:grid-cols-3"
+        >
+          <div class="flex flex-col">
+            <dt
+              class="flex items-center gap-x-3 text-base font-semibold leading-7 text-foreground"
+            >
+              <span aria-hidden="true" class="flex-none text-primary">
+                <Icon icon="ri:service-line" className="size-8" client:load />
+              </span>
+              Service
+            </dt>
+            <dd
+              class="mt-4 flex flex-auto flex-col text-base leading-7 text-foreground-secondary"
+            >
+              <ul class="flex flex-col gap-4">
+                <IconLi> Free sample available. </IconLi>
+                <IconLi> Testing before loading. </IconLi>
+                <IconLi> Packing products into various small packages. </IconLi>
+                <IconLi>
+                  If not satisfied with the product, can return it free of
+                  charge.
+                </IconLi>
+              </ul>
+            </dd>
+          </div>
+          <div class="flex flex-col">
+            <dt
+              class="flex items-center gap-x-3 text-base font-semibold leading-7 text-foreground"
+            >
+              <span aria-hidden="true" class="flex-none text-primary">
+                <Icon icon="ri:gift-line" className="size-8" client:load />
+              </span>
+              Wide Range Of products
+            </dt>
+            <dd
+              class="mt-4 flex flex-auto flex-col text-base leading-7 text-foreground-secondary"
+            >
+              <ul class="flex flex-col gap-4">
+                <IconLi> Disinfectant </IconLi>
+                <IconLi> Water balance </IconLi>
+                <IconLi> Algicide </IconLi>
+                <IconLi> Flocculant </IconLi>
+                <IconLi> Water test </IconLi>
+              </ul>
+            </dd>
+          </div>
+          <div class="flex flex-col">
+            <dt
+              class="flex items-center gap-x-3 text-base font-semibold leading-7 text-foreground"
+            >
+              <span aria-hidden="true" class="flex-none text-primary">
+                <Icon icon="ri:trophy-line" className="size-8" client:load />
+              </span>
+              Professional
+            </dt>
+            <dd
+              class="mt-4 flex flex-auto flex-col text-base leading-7 text-foreground-secondary"
+            >
+              <ul class="flex flex-col gap-4">
+                <IconLi> More than seven years experience. </IconLi>
+                <IconLi>
+                  Service is provided by our professional team of employees.
+                </IconLi>
+                <IconLi>
+                  Leading repackager of swimming pool and spa chemicals in
+                  China.
+                </IconLi>
+                <IconLi>
+                  ISO 9001:2008 Quality Assurance Accreditation.
+                </IconLi>
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </Motion><section class="m-h-20 w-full bg-primary-600 py-24 sm:py-32">
+    <div class="container">
+      <div class="mx-auto max-w-2xl lg:max-w-none">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Trusted by customers worldwide
+          </h2>
+        </div>
+        <dl
+          class="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Years of Experience
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={17}
+              />
+            </dd>
+          </div>
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Products
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={15}
+              />
+            </dd>
+          </div>
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Customers
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={200}
+              />
+            </dd>
+          </div>
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Countries
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={30}
+              />
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+  <section class="m-h-20 w-full overflow-hidden py-24 pb-10">
+    <div class="container">
+      <div
+        class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start"
+      >
+        <div class="px-6 lg:px-0 lg:pr-4 lg:pt-4">
+          <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
+            <p
+              class="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+            >
+              Our Story
+            </p>
+            <div
+              class="mt-10 max-w-xl space-y-8 text-base leading-7 text-foreground-secondary lg:max-w-none"
+            >
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We were established in 2007. Since then, we have specialized in the
+                production and export of water treatment chemicals.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We have passed the ISO 9001:2008 edition quality assurance to manage
+                systematic attestation, and assisted our business partners in completing
+                BPR registration to provide a better service for customers in Europe.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+
+                We have exported products to more than 30 countries and regions
+                worldwide.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We take part in some international exhibitions, such as Fira Barcelona,
+                QPS,Water Ex,Piscine France, the Canton Fair, etc.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                Every year, many customers from all over the world came to Qingdao
+                to visit our factory. We have established many long-term business
+                relationships.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We are located in the international business city of Qingdao.
+              </p>
+            </div>
+            <div
+              class="text-xl font-bold text-primary-600 mt-16 playwrite-au-sa-bold"
+            >
+              Welcome to China, Happy meet you in QingDao!
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative isolate overflow-hidden pt-8 sm:mx-auto sm:max-w-2xl sm:rounded-3xl sm:pl-16 sm:pr-0 sm:pt-16 lg:mx-0 lg:max-w-none"
+        >
+          <img
+            alt="Our Story"
+            src="https://liaoker-storage.oss-cn-qingdao.aliyuncs.com/4299262263296/82337def-393c-4f0b-96c7-da8f41446004.png"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  <FooterCTA />
+  <Footer />
+  <Globals />
+</Layout><section class="m-h-20 w-full bg-primary-600 py-24 sm:py-32">
+    <div class="container">
+      <div class="mx-auto max-w-2xl lg:max-w-none">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            Trusted by customers worldwide
+          </h2>
+        </div>
+        <dl
+          class="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4"
+        >
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Years of Experience
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={17}
+              />
+            </dd>
+          </div>
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Products
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={15}
+              />
+            </dd>
+          </div>
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Customers
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={200}
+              />
+            </dd>
+          </div>
+          <div class="flex flex-col bg-white/5 p-8">
+            <dt class="text-sm font-semibold leading-6 text-gray-300">
+              Countries
+            </dt>
+            <dd
+              class="order-first text-4xl font-semibold tracking-tight text-white"
+            >
+              <AnimationNumber
+                class="flex items-center justify-center gap-2"
+                once
+                end={30}
+              />
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+  <section class="m-h-20 w-full overflow-hidden py-24 pb-10">
+    <div class="container">
+      <div
+        class="grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:grid-cols-2 lg:items-start"
+      >
+        <div class="px-6 lg:px-0 lg:pr-4 lg:pt-4">
+          <div class="mx-auto max-w-2xl lg:mx-0 lg:max-w-lg">
+            <p
+              class="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+            >
+              Our Story
+            </p>
+            <div
+              class="mt-10 max-w-xl space-y-8 text-base leading-7 text-foreground-secondary lg:max-w-none"
+            >
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We were established in 2007. Since then, we have specialized in the
+                production and export of water treatment chemicals.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We have passed the ISO 9001:2008 edition quality assurance to manage
+                systematic attestation, and assisted our business partners in completing
+                BPR registration to provide a better service for customers in Europe.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+
+                We have exported products to more than 30 countries and regions
+                worldwide.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We take part in some international exhibitions, such as Fira Barcelona,
+                QPS,Water Ex,Piscine France, the Canton Fair, etc.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                Every year, many customers from all over the world came to Qingdao
+                to visit our factory. We have established many long-term business
+                relationships.
+              </p>
+              <p class="flex gap-4">
+                <span class="mt-2">
+                  <Icon
+                    icon="fluent-mdl2:event-to-do-logo"
+                    className="text-primary-600 size-5"
+                    client:load
+                  />
+                </span>
+                We are located in the international business city of Qingdao.
+              </p>
+            </div>
+            <div
+              class="text-xl font-bold text-primary-600 mt-16 playwrite-au-sa-bold"
+            >
+              Welcome to China, Happy meet you in QingDao!
+            </div>
+          </div>
+        </div>
+        <div
+          class="relative isolate overflow-hidden pt-8 sm:mx-auto sm:max-w-2xl sm:rounded-3xl sm:pl-16 sm:pr-0 sm:pt-16 lg:mx-0 lg:max-w-none"
+        >
+          <img
+            alt="Our Story"
+            src="https://liaoker-storage.oss-cn-qingdao.aliyuncs.com/4299262263296/82337def-393c-4f0b-96c7-da8f41446004.png"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+  <FooterCTA />
+  <Footer />
+  <Globals />
+</Layout>

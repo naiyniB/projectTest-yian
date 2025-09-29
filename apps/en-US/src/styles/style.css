@@ -3,5 +3,216 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 集成的默认注入的 base.css 文件 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+@layer components {
+  /* 基础按钮样式 */
+  .btn {
+    @apply inline-flex items-center rounded-md font-semibold;
+    @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+    @apply px-2 py-2 text-sm text-center flex justify-center cursor-pointer;
+    @apply hover:scale-105 transition-transform;
+  }
+
+  /* 尺寸变体 */
+  .btn-xs {
+    @apply text-xs px-2.5 py-1.5 rounded;
+  }
+
+  .btn-sm {
+    @apply text-sm px-3 py-2 rounded-md;
+  }
+
+  .btn-md {
+    @apply text-sm px-4 py-2.5 rounded-md;
+  }
+
+  .btn-lg {
+    @apply text-base px-5 py-3 rounded-lg;
+  }
+
+  .btn-xl {
+    @apply text-lg px-6 py-3.5 rounded-lg;
+  }
+
+  /* 颜色变体 */
+  .btn-primary {
+    @apply bg-[var(--btn-primary-bg)] text-[var(--btn-primary-text)] border border-[var(--btn-primary-border)];
+    @apply hover:bg-[var(--btn-primary-hover-bg)] hover:border-[var(--btn-primary-hover-border)];
+    @apply active:bg-[var(--btn-primary-active-bg)] active:border-[var(--btn-primary-active-border)];
+    @apply disabled:bg-[var(--btn-primary-disabled-bg)] disabled:border-[var(--btn-primary-disabled-border)];
+    @apply focus:ring-primary-500;
+  }
+
+  .btn-secondary {
+    @apply bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)] border border-[var(--btn-secondary-border)];
+    @apply hover:bg-[var(--btn-secondary-hover-bg)] hover:border-[var(--btn-secondary-hover-border)];
+    @apply active:bg-[var(--btn-secondary-active-bg)] active:border-[var(--btn-secondary-active-border)];
+    @apply disabled:bg-[var(--btn-secondary-disabled-bg)] disabled:border-[var(--btn-secondary-disabled-border)];
+    @apply focus:ring-secondary-500;
+  }
+
+  .btn-accent {
+    @apply bg-[var(--btn-accent-bg)] text-[var(--btn-accent-text)] border border-[var(--btn-accent-border)];
+    @apply hover:bg-[var(--btn-accent-hover-bg)] hover:border-[var(--btn-accent-hover-border)];
+    @apply active:bg-[var(--btn-accent-active-bg)] active:border-[var(--btn-accent-active-border)];
+    @apply disabled:bg-[var(--btn-accent-disabled-bg)] disabled:border-[var(--btn-accent-disabled-border)];
+    @apply focus:ring-accent-500;
+  }
+
+  .btn-neutral {
+    @apply bg-[var(--btn-neutral-bg)] text-[var(--btn-neutral-text)] border border-[var(--btn-neutral-border)];
+    @apply hover:bg-[var(--btn-neutral-hover-bg)] hover:border-[var(--btn-neutral-hover-border)];
+    @apply active:bg-[var(--btn-neutral-active-bg)] active:border-[var(--btn-neutral-active-border)];
+    @apply disabled:bg-[var(--btn-neutral-disabled-bg)] disabled:border-[var(--btn-neutral-disabled-border)];
+    @apply focus:ring-neutral-500;
+  }
+
+  .btn-danger {
+    @apply bg-[var(--btn-danger-bg)] text-[var(--btn-danger-text)] border border-[var(--btn-danger-border)];
+    @apply hover:bg-[var(--btn-danger-hover-bg)] hover:border-[var(--btn-danger-hover-border)];
+    @apply active:bg-[var(--btn-danger-active-bg)] active:border-[var(--btn-danger-active-border)];
+    @apply disabled:bg-[var(--btn-danger-disabled-bg)] disabled:border-[var(--btn-danger-disabled-border)];
+    @apply focus:ring-danger-500;
+  }
+
+  .btn-success {
+    @apply bg-[var(--btn-success-bg)] text-[var(--btn-success-text)] border border-[var(--btn-success-border)];
+    @apply hover:bg-[var(--btn-success-hover-bg)] hover:border-[var(--btn-success-hover-border)];
+    @apply active:bg-[var(--btn-success-active-bg)] active:border-[var(--btn-success-active-border)];
+    @apply disabled:bg-[var(--btn-success-disabled-bg)] disabled:border-[var(--btn-success-disabled-border)];
+    @apply focus:ring-success-500;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent text-foreground-primary border border-transparent;
+    @apply hover:bg-surface-subtle;
+    @apply active:bg-surface-muted;
+    @apply disabled:bg-transparent disabled:text-foreground-disabled;
+    @apply focus:ring-primary-500;
+  }
+
+  .btn-link {
+    @apply bg-transparent text-primary-600 border-none p-0 h-auto;
+    @apply hover:underline hover:underline-offset-4;
+    @apply active:text-primary-800;
+    @apply disabled:text-foreground-disabled;
+    @apply focus:ring-0;
+  }
+
+  /* 描边按钮变体 */
+  .btn-outlined {
+    @apply bg-transparent;
+  }
+  
+  .btn-outlined.btn-primary {
+    @apply bg-transparent text-primary border-primary;
+    @apply hover:bg-surface-subtle hover:text-primary-600 hover:border-primary-600;
+    @apply active:bg-surface-muted active:text-primary-700 active:border-primary-700;
+  }
+  
+  .btn-outlined.btn-secondary {
+    @apply bg-transparent text-secondary border-secondary;
+    @apply hover:bg-surface-subtle hover:text-secondary-600 hover:border-secondary-600;
+    @apply active:bg-surface-muted active:text-secondary-700 active:border-secondary-700;
+  }
+  
+  .btn-outlined.btn-accent {
+    @apply bg-transparent text-accent border-accent;
+    @apply hover:bg-surface-subtle hover:text-accent-600 hover:border-accent-600;
+    @apply active:bg-surface-muted active:text-accent-700 active:border-accent-700;
+  }
+  
+  .btn-outlined.btn-danger {
+    @apply bg-transparent text-danger border-danger;
+    @apply hover:bg-surface-subtle hover:text-danger-600 hover:border-danger-600;
+    @apply active:bg-surface-muted active:text-danger-700 active:border-danger-700;
+  }
+  
+  .btn-outlined.btn-success {
+    @apply bg-transparent text-success border-success;
+    @apply hover:bg-surface-subtle hover:text-success-600 hover:border-success-600;
+    @apply active:bg-surface-muted active:text-success-700 active:border-success-700;
+  }
+
+  /* 其他变体 */
+  .btn-full {
+    @apply w-full;
+  }
+
+  /* 加载状态 */
+  .btn-loading {
+    @apply relative;
+  }
+
+  .btn-loading-spinner {
+    @apply mr-2 inline-block animate-spin;
+  }
+  .desk-nav-link {
+    @apply relative text-sm font-semibold leading-6 text-foreground disabled:opacity-50;
+    @apply actived:after:content-[''] actived:after:absolute actived:after:-bottom-2 actived:after:h-0 actived:after:border-2 actived:after:rounded-md actived:after:w-1/2 actived:after:left-1/2 actived:after:translate-x-[-50%] actived:after:border-foreground-primary;
+  }
+  .container {
+    @apply w-full mx-auto max-w-7xl px-8 2xl:px-0 min-h-12;
+  }
+  .block-title {
+    @apply text-2xl font-bold tracking-tight text-gray-900 relative;
+    @apply after:content-[''] after:absolute after:-bottom-4 after:h-0 after:border-2 after:rounded-md after:w-1/2 after:border-sky-600 after:left-1/2 after:translate-x-[-50%];
+  }
+  .breadcrumb-item {
+    @apply text-sm font-medium text-gray-500 hover:text-gray-700;
+  }
+  .breadcrumb-separator {
+    @apply text-sm font-medium text-gray-500;
+  }
+  .breadcrumb-item-active {
+    @apply text-sm font-medium text-gray-700;
+  }
+  .tabs-header {
+    @apply flex items-stretch h-10 text-sm border-b border-gray-200 bg-white;
+  }
+  .tabs-tab {
+    @apply relative flex items-center px-4 cursor-pointer selected:text-sky-500;
+  }
+  .tab-indicator {
+    @apply z-0 w-full absolute bottom-0 left-0 border-b-2 border-sky-500 hidden selected:block;
+  }
+  .tabs-panel {
+    @apply flex-col p-4 hidden selected:block;
+  }
+}
+
+.primary-cradient {
+  @apply bg-blue-500 text-white border border-blue-500;
+  background-image: linear-gradient(
+    150deg,
+    #0088cc 0%,
+    #0088cc 50%,
+    #0169fe 80%,
+    #0169fe 100%
+  );
+  border-color: #08c #08c #069;
+}
+.primary-cradient:hover {
+  background-image: linear-gradient(
+    150deg,
+    #0088cc 0%,
+    #0088cc 20%,
+    #0169fe 60%,
+    #0169fe 100%
+  );
+}
+
+.light-mode {
+  color-scheme: light;
+}
+
+.light-mode * {
+  /* 重置回亮色模式的关键样式 */
+  color: initial;
+  background-color: initial;
+}
 
